@@ -8,7 +8,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь c указанным ID не найден.');
       }
-      return res.status(200).send({ data: user });
+      return res.status(200).send({ data: [user.name, user.email] });
     })
     .catch(next);
 };
