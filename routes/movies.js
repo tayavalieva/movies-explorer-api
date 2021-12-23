@@ -11,3 +11,5 @@ moviesRouter.post('/movies', addSavedMovie);
 
 // deletes saved movie
 moviesRouter.delete('/movies/:movieId', deleteSavedMovie);
+
+module.exports = moviesRouter;

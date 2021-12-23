@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const movieSchema = new mongoose.Schema({
   nameRU: {
     type: String,
@@ -20,26 +19,26 @@ const movieSchema = new mongoose.Schema({
   },
   duration: {
     type: Number,
-    required: true
+    required: true,
   },
   year: {
-    type: Number,
-    required: true
+    type: String,
+    required: true,
   },
   description: {
-      type: String,
-      required: true
-    },
+    type: String,
+    required: true,
+  },
   image: {
-      type: String,
-      required: true,
-      validate: {
-        validator(v) {
-          return /^(https?:\/\/)(www\.)?(([\w-])+\.)+([a-z]{2,6})(\/[\S]{1,})?/gi.test(v);
-        },
-        message: 'Неправильный формат ссылки',
+    type: String,
+    required: true,
+    validate: {
+      validator(v) {
+        return /^(https?:\/\/)(www\.)?(([\w-])+\.)+([a-z]{2,6})(\/[\S]{1,})?/gi.test(v);
       },
+      message: 'Неправильный формат ссылки',
     },
+  },
   trailer: {
     type: String,
     required: true,
@@ -66,10 +65,10 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
 
-  movieID: {
+  id: {
     type: Number,
     required: true,
-  }
+  },
 
 });
 
