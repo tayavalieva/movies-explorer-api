@@ -1,14 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const auth = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
 app.use(bodyParser.json());
-
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const usersRoutes = require('./routes/users');
 const moviesRoutes = require('./routes/movies');
@@ -25,6 +27,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(auth);
 app.use('/', usersRoutes);
 app.use('/', moviesRoutes);
 app.use('*', notFoundRoute);
