@@ -3,7 +3,8 @@ const BadRequest = require('../errors/bad-request');
 const NotFoundError = require('../errors/not-found');
 
 module.exports.getSavedMovies = (req, res, next) => {
-  Movie.find({})
+  const owner = req.user._id;
+  Movie.find({ owner })
     .then((movies) => res.status(200).send({ data: movies }))
     .catch(next);
 };
