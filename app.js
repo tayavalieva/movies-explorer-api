@@ -7,6 +7,7 @@ const helmet = require('helmet');
 
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/error-handler');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { createUser, login } = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
@@ -25,6 +26,7 @@ mongoose
   .connect('mongodb://localhost:27017/moviesdb')
   .catch((err) => console.log(err.message));
 
+app.use(requestLogger);
 app.use(helmet());
 
 // register a new user route
@@ -58,6 +60,7 @@ app.use('/', usersRoutes);
 app.use('/', moviesRoutes);
 app.use('*', notFoundRoute);
 
+app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 
