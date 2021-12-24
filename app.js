@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
+const cors = require('cors');
 const helmet = require('helmet');
 
 const auth = require('./middlewares/auth');
@@ -26,7 +27,13 @@ mongoose
   .connect('mongodb://localhost:27017/moviesdb')
   .catch((err) => console.log(err.message));
 
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  credentials: true,
+};
+
 app.use(requestLogger);
+app.use(cors(corsOptions));
 app.use(helmet());
 
 // register a new user route
