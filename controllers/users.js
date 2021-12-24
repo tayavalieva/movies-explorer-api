@@ -9,6 +9,7 @@ const ConflictError = require('../errors/conflict');
 const BadRequest = require('../errors/bad-request');
 const UnauthorizedError = require('../errors/unauthorized');
 
+// Register new user
 module.exports.createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10).then((hash) => User.create({
     email: req.body.email,
@@ -27,6 +28,7 @@ module.exports.createUser = (req, res, next) => {
     });
 };
 
+// Login
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
@@ -41,6 +43,11 @@ module.exports.login = (req, res, next) => {
     }).catch(() => {
       throw new UnauthorizedError('Неверный логин или пароль');
     }).catch(next);
+};
+
+// Sign out
+module.exports.signOut = (req, res) => {
+  res.clearCookie('jwt').send({ message: 'Signed out' });
 };
 
 module.exports.getCurrentUser = (req, res, next) => {

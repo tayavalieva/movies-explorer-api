@@ -1,6 +1,6 @@
 const usersRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { getCurrentUser, updateProfile } = require('../controllers/users');
+const { getCurrentUser, updateProfile, signOut } = require('../controllers/users');
 
 // gets current user info: name and email
 usersRouter.get('/users/me', getCurrentUser);
@@ -16,5 +16,7 @@ usersRouter.patch(
   }),
   updateProfile,
 );
+
+usersRouter.delete('/signout', signOut);
 
 module.exports = usersRouter;
