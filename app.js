@@ -23,13 +23,6 @@ mongoose
   .connect('mongodb://localhost:27017/moviesdb')
   .catch((err) => console.log(err.message));
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '61c4c5849236fcf14191758c',
-  };
-  next();
-});
-
 // register a new user route
 app.post(
   '/signup',

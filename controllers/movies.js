@@ -14,7 +14,7 @@ module.exports.addSavedMovie = (req, res, next) => {
   const owner = req.user._id;
   const {
     country, director, duration, year,
-    description, image, trailer, nameRU, nameEN, thumbnail, id,
+    description, image, trailer, nameRU, nameEN, thumbnail, movieId,
   } = req.body;
   Movie.create({
     country,
@@ -27,7 +27,7 @@ module.exports.addSavedMovie = (req, res, next) => {
     nameRU,
     nameEN,
     thumbnail,
-    id,
+    movieId,
     owner,
   })
     .then((movie) => res.status(201).send({ data: movie }))
