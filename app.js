@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const { celebrate, Joi } = require('celebrate');
 
 const auth = require('./middlewares/auth');
-const { createUser } = require('./controllers/users');
+const { createUser, login } = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
 
@@ -43,7 +43,20 @@ app.post(
   createUser,
 );
 
+// sign in route
+app.post(
+  '/signin',
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(8),
+    }),
+  }),
+  login,
+);
+
 app.use(auth);
+
 app.use('/', usersRoutes);
 app.use('/', moviesRoutes);
 app.use('*', notFoundRoute);
