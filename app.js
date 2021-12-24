@@ -2,7 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const { celebrate, Joi } = require('celebrate');
+
 const auth = require('./middlewares/auth');
+const { createUser } = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
 
@@ -26,6 +29,19 @@ app.use((req, res, next) => {
   };
   next();
 });
+
+// register a new user route
+app.post(
+  '/signup',
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string().required().email(),
+      password: Joi.string().required().min(8),
+      name: Joi.string().min(2).max(30),
+    }),
+  }),
+  createUser,
+);
 
 app.use(auth);
 app.use('/', usersRoutes);

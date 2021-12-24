@@ -1,5 +1,9 @@
+const bcrypt = require('bcryptjs');
+
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found');
+const ConflictError = require('../errors/conflict');
+const BadRequest = require('../errors/bad-request');
 
 module.exports.getCurrentUser = (req, res, next) => {
   const userID = req.user._id;
@@ -28,4 +32,22 @@ module.exports.updateProfile = (req, res, next) => {
       return res.status(200).send({ data: user });
     })
     .catch(next);
+};
+
+module.exports.createUser = (req, res, next) => {
+  bcrypt.hash(req.body.password, 10).then((hash) => User.create({
+    email: req.body.email,
+    password: hash,
+    name: req.body.name,
+  }))
+    .then((user) => res.status(201).send({ data: [user.name, user.email] }))
+    .catch((err) => {
+      if (err.code === 11000) {
+        return next(new ConflictError('Такой пользователь уже существует'));
+      }
+      if (err.name === 'ValidationError') {
+        return next(new BadRequest('Неверные данные для регистрации'));
+      }
+      return next(err);
+    });
 };
