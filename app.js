@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { celebrate, Joi, errors } = require('celebrate');
+const helmet = require('helmet');
 
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/error-handler');
@@ -23,6 +24,8 @@ const notFoundRoute = require('./routes/notFoundRoute');
 mongoose
   .connect('mongodb://localhost:27017/moviesdb')
   .catch((err) => console.log(err.message));
+
+app.use(helmet());
 
 // register a new user route
 app.post(
