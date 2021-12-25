@@ -23,7 +23,7 @@ moviesRouter.post(
       image: Joi.string().required().custom(method),
       trailer: Joi.string().required().custom(method),
       thumbnail: Joi.string().required().custom(method),
-      owner: Joi.string().required().hex(),
+      owner: Joi.string().hex(),
       movieId: Joi.number().required(),
     }),
   }),
@@ -35,7 +35,7 @@ moviesRouter.delete(
   '/movies/:movieId',
   celebrate({
     params: Joi.object().keys({
-      movieId: Joi.number().required(),
+      movieId: Joi.string().required().hex(),
     }),
   }),
   deleteSavedMovie,
