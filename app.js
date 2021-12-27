@@ -23,16 +23,6 @@ const router = require('./routes/index');
 
 mongoose.connect(MONGO_URL).catch((err) => console.log(err.message));
 
-// const corsOptions = {
-//   origin: [
-//     'http://localhost:3000',
-//     'http://localhost:3001',
-//     'http://movie-explorer.nomoredomains.rocks',
-//     'https://movie-explorer.nomoredomains.rocks',
-//   ],
-//   credentials: true,
-// };
-
 app.use(requestLogger);
 app.use(cors(corsOptions));
 app.use(helmet());
