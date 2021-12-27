@@ -6,7 +6,7 @@ const ForbiddenError = require('../errors/forbidden');
 module.exports.getSavedMovies = (req, res, next) => {
   const owner = req.user._id;
   Movie.find({ owner })
-    .then((movies) => res.status(200).send({ data: movies }))
+    .then((movies) => res.send({ data: movies }))
     .catch(next);
 };
 
@@ -48,7 +48,7 @@ module.exports.deleteSavedMovie = (req, res, next) => {
         throw new ForbiddenError('Нет прав для удаления фильма');
       }
       return Movie.findByIdAndDelete(req.params.movieId)
-        .then(res.status(200).send({ data: movie }));
+        .then(res.send({ data: movie }));
     })
     .catch(next);
 };

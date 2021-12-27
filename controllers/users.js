@@ -57,7 +57,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь c указанным ID не найден.');
       }
-      return res.status(200).send({ data: [user.name, user.email] });
+      return res.send({ data: [user.name, user.email] });
     })
     .catch(next);
 };
@@ -74,7 +74,7 @@ module.exports.updateProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь c указанным ID не найден.');
       }
-      return res.status(200).send({ data: user });
+      return res.send({ data: user });
     })
     .catch((err) => {
       if (err.code === 11000) {
