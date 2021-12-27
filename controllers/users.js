@@ -76,5 +76,10 @@ module.exports.updateProfile = (req, res, next) => {
       }
       return res.status(200).send({ data: user });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) {
+        return next(new ConflictError('Пользователь с указанным email уже существует'));
+      }
+      return next(err);
+    });
 };
