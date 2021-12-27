@@ -7,11 +7,11 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const helmet = require('helmet');
+const { corsOptions } = require('./configs/cors-config');
 
 const errorHandler = require('./middlewares/error-handler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-
-const { PORT = 3000, MONGODB_URI = 'mongodb://localhost:27017/moviesdb' } = process.env;
+const { PORT, MONGO_URL } = require('./configs/config');
 
 const app = express();
 
@@ -21,17 +21,17 @@ app.use(cookieParser());
 
 const router = require('./routes/index');
 
-mongoose.connect(MONGODB_URI).catch((err) => console.log(err.message));
+mongoose.connect(MONGO_URL).catch((err) => console.log(err.message));
 
-const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://movie-explorer.nomoredomains.rocks',
-    'https://movie-explorer.nomoredomains.rocks',
-  ],
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: [
+//     'http://localhost:3000',
+//     'http://localhost:3001',
+//     'http://movie-explorer.nomoredomains.rocks',
+//     'https://movie-explorer.nomoredomains.rocks',
+//   ],
+//   credentials: true,
+// };
 
 app.use(requestLogger);
 app.use(cors(corsOptions));
