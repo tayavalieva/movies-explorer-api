@@ -15,6 +15,10 @@ const { PORT, MONGO_URL } = require('./configs/config');
 
 const app = express();
 
+// const limiter = require('./middlewares/limiter');
+
+// app.use(limiter);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
