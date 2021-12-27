@@ -47,7 +47,7 @@ module.exports.deleteSavedMovie = (req, res, next) => {
       if (movie.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Нет прав для удаления фильма');
       }
-      return Movie.findByIdAndDelete(req.params.movieId)
+      movie.remove()
         .then(res.send({ data: movie }));
     })
     .catch(next);
