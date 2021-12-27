@@ -13,7 +13,7 @@ const errorHandler = require('./middlewares/error-handler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { createUser, login } = require('./controllers/users');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, MONGODB_URI = 'mongodb://localhost:27017/moviesdb' } = process.env;
 
 const app = express();
 
@@ -25,12 +25,15 @@ const usersRoutes = require('./routes/users');
 const moviesRoutes = require('./routes/movies');
 const notFoundRoute = require('./routes/notFoundRoute');
 
-mongoose
-  .connect('mongodb://localhost:27017/moviesdb')
-  .catch((err) => console.log(err.message));
+mongoose.connect(MONGODB_URI).catch((err) => console.log(err.message));
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://movie-explorer.nomoredomains.rocks', 'https://movie-explorer.nomoredomains.rocks'],
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://movie-explorer.nomoredomains.rocks',
+    'https://movie-explorer.nomoredomains.rocks',
+  ],
   credentials: true,
 };
 
