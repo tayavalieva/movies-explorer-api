@@ -8,16 +8,14 @@ const { errors } = require('celebrate');
 const cors = require('cors');
 const helmet = require('helmet');
 const { corsOptions } = require('./configs/cors-config');
-
+const { limiter } = require('./middlewares/limiter');
 const errorHandler = require('./middlewares/error-handler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT, MONGO_URL } = require('./configs/config');
 
 const app = express();
 
-// const limiter = require('./middlewares/limiter');
-
-// app.use(limiter);
+app.use(limiter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
