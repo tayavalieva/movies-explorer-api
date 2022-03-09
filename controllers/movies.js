@@ -13,17 +13,8 @@ module.exports.getSavedMovies = (req, res, next) => {
 module.exports.addSavedMovie = (req, res, next) => {
   const owner = req.user._id;
   const {
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailer,
-    nameRU,
-    nameEN,
-    thumbnail,
-    movieId,
+    country, director, duration, year,
+    description, image, trailer, nameRU, nameEN, thumbnail, movieId,
   } = req.body;
   Movie.create({
     country,
@@ -42,10 +33,8 @@ module.exports.addSavedMovie = (req, res, next) => {
     .then((movie) => res.status(201).send({ data: movie }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest('Введены данные в неверном формате'));
-      } else {
-        next(err);
-      }
+        next(new BadRequest('Введеные данные в неверном формате'));
+      } else { next(err); }
     });
 };
 
@@ -58,7 +47,8 @@ module.exports.deleteSavedMovie = (req, res, next) => {
       if (movie.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Нет прав для удаления фильма');
       }
-      movie.remove().then(res.send({ data: movie }));
+      movie.remove()
+        .then(res.send({ data: movie }));
     })
     .catch(next);
 };
