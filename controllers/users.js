@@ -11,23 +11,12 @@ const UnauthorizedError = require('../errors/unauthorized');
 
 // Register new user
 module.exports.createUser = (req, res, next) => {
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hash) => User.create({
-      email: req.body.email,
-      password: hash,
-      name: req.body.name,
-    }))
-    .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-        expiresIn: '7d',
-      });
-      res.cookie('jwt', token, {
-        maxAge: 3600000,
-        httpOnly: true,
-      });
-      res.status(201).send({ data: { name: user.name, email: user.email } });
-    })
+  bcrypt.hash(req.body.password, 10).then((hash) => User.create({
+    email: req.body.email,
+    password: hash,
+    name: req.body.name,
+  }))
+    .then((user) => res.status(201).send({ data: [user.name, user.email] }))
     .catch((err) => {
       if (err.code === 11000) {
         return next(new ConflictError('Такой пользователь уже существует'));
@@ -45,21 +34,15 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-        expiresIn: '7d',
-      });
-      res
-        .cookie('jwt', token, {
-          maxAge: 3600000,
-          httpOnly: true,
-        })
-        .send({ message: 'Sucessfully logged in' })
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+      res.cookie('jwt', token, {
+        maxAge: 3600000,
+        httpOnly: true,
+      }).send({ message: 'Sucessfully logged in' })
         .end();
-    })
-    .catch(() => {
+    }).catch(() => {
       throw new UnauthorizedError('Неверный логин или пароль');
-    })
-    .catch(next);
+    }).catch(next);
 };
 
 // Sign out
@@ -74,7 +57,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь c указанным ID не найден.');
       }
-      return res.send({ data: user });
+      return res.send({ data: [user.name, user.email] });
     })
     .catch(next);
 };
@@ -95,9 +78,7 @@ module.exports.updateProfile = (req, res, next) => {
     })
     .catch((err) => {
       if (err.code === 11000) {
-        return next(
-          new ConflictError('Пользователь с указанным email уже существует'),
-        );
+        return next(new ConflictError('Пользователь с указанным email уже существует'));
       }
       return next(err);
     });
